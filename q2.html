@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/css/perfect-scrollbar.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.2/perfect-scrollbar.min.js"></script>
+    <script src="./q2.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <a href=""><img src="./tokens/uniswap.png" alt="logo"></a>
+            <a href="" class="navbar-content active">Swap</a> 
+            <a href="" class="navbar-content">Tokens</a>
+            <a href="" class="navbar-content">NFTs</a>
+            <a href="" class="navbar-content">Pools</a>
+            <a href="" class="fa navbar-content">&#xf141;</a>
+
+            <input type="search" class="search">
+            <div class="alignRight">
+                <button class="navbar-content" id="listdown">
+                    <img src="./tokens/ETH.svg" id="navbar-token">
+                    <img src="./tokens/dropdown.png" id="navbar-dropdown">
+                </button>
+                <button class="navbar-content" id="connect">Connect</button>
+            </div>
+            
+
+
+        </div>
+
+        <div class="form">
+            <div class="currSwap">
+                <div class="currSwap-header">
+                    <p class="header-item active">Swap</p>
+                    <button class="header-item buy">Buy</button>
+                    <img src="./tokens/settings.png" alt="settings" class="settings">
+                </div>
+                <div class="swaparea">
+                    <div class="pay box"> 
+                        <p class="pr">You pay</p>
+                        <br><input type="number" class="amount" placeholder="0" oninput="convert()">
+                        <button type="button" class="currency" onclick="toggleModal(event)" onmouseover="updateBgColor(event)" onmouseout="resetBgColor(event)">
+                            <span>ETH </span><img src="./tokens/ETH.svg" class="slct"><img src="./tokens/dropdown.png" class="dropdown">
+                        </button>
+                        <input type="text" disabled class="value">
+                    </div>
+                    <button type="button" class="swap-button" onclick="prSwap()"><img src="./tokens/swapbutton.png" alt="swap"></button>
+                    <div class="receive box">
+                        <p class="pr">You receive</p>
+                        <br><input type="number" class="amount" placeholder="0">
+                        <button type="button" class="currency" onclick="toggleModal(event)" onmouseover="updateBgColor(event)" onmouseout="resetBgColor(event)">
+                            <span>bNEO </span><img src="./tokens/bNEO.svg" class="slct"><img src="./tokens/dropdown.png" class="dropdown">
+                        </button>
+                        <input type="text" disabled class="value">
+                    </div>
+                </div>
+
+                <button type="button" class="connectwallet"><b>Connect Wallet</b></button>
+            </div>
+        </div>
+
+        <div class="modal">
+            <p class="modal-header">Select a token</p>
+            <!-- <button class="modal-button">
+                <img src="./tokens/ETH.svg" class="tokenlogo">
+                <p class="token-labels">
+                    <span class="tokenname">Ether</span>
+                    <span class="tokensf">ETH</span>
+                </p>
+            </button> -->
+        </div>
+    </div>
+    
+
+
+    
+</body>
+</html>
