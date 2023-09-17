@@ -1,21 +1,22 @@
+// Swap button
 function prSwap() {
-    var pay = document.getElementsByClassName("currency")[0].querySelector("span");
-    var payImg = document.getElementsByClassName("slct")[0];
+    const pay = $(".currency").eq(0).find("span");
+    const payImg = $(".slct").eq(0);
 
-    var rec = document.getElementsByClassName("currency")[1].querySelector("span");
-    var recImg = document.getElementsByClassName("slct")[1];
+    const rec = $(".currency").eq(1).find("span");
+    const recImg = $(".slct").eq(1);
 
     console.log(payImg.src);
-    const temp = pay.innerHTML;
-    pay.innerHTML = rec.innerHTML;
-    rec.innerHTML = temp;
+    const temp = pay.html();
+    pay.html(rec.html());
+    rec.html(temp);
     
-    payImg.src = "./tokens/" + pay.innerHTML.trim() + ".svg";
-    recImg.src = "./tokens/" + rec.innerHTML.trim() + ".svg";
-
+    payImg.attr("src", "./tokens/" + pay.html().trim() + ".svg");
+    recImg.attr("src", "./tokens/" + rec.html().trim() + ".svg");
     convert();
 }
 
+// Correcting background colour of images
 function updateBgColor(event) {
     var button = event.target;
     var bgColor = getComputedStyle(button).backgroundColor;
@@ -64,46 +65,51 @@ const currencyData = [{"currency":"BLUR", "name":"Blur","price":0.20811525423728
 {"currency":"wstETH", "name":"Wrapped Liquid Staked Ether","price":1872.2579742372882},
 {"currency":"YieldUSD", "name":"Yield USD","price":1.0290847966101695},
 {"currency":"ZIL", "name":"Zilliqa", "price":0.01651813559322034}];
+const currencyDataWithIds = currencyData.map((currency, index) => ({
+    ...currency,
+    id: index + 1
+}));
 
-let count = 0;
 document.addEventListener('DOMContentLoaded', function() {
-    while (count < currencyData.length ) {
-        const item = currencyData[count];
-        const tokensf = item.currency;
-        const name = item.name;
+    const modal = document.querySelector('.modal');
 
-        var button = document.createElement("button");
+    for (const item of currencyData) {
+        const { currency, name } = item;
+
+        const button = document.createElement("button");
         button.className = "modal-button";
         button.onclick = function() {
-            let i = 0;
-            if (sessionStorage.getItem("pay") != "true") i=1;
-            
-            document.getElementsByClassName("currency")[i].querySelector("span").innerHTML = tokensf + " ";
-            document.getElementsByClassName("slct")[i].src = "./tokens/" + tokensf + ".svg";
+            const i = sessionStorage.getItem("pay") !== "true" ? 1 : 0;
+            $(".currency").eq(i).find("span").html(`${currency} `);
+            $(".slct").eq(i).attr("src", "./tokens/" + currency + ".svg");
             convert();
         };
-        var token = document.createElement("img");
+
+        const token = document.createElement("img");
         token.className = "tokenlogo";
-        token.src = "./tokens/" + tokensf + ".svg";
-        var para = document.createElement("p");
+        token.src = `./tokens/${currency}.svg`;
+
+        const para = document.createElement("p");
         para.className = "token-labels";
-        var tokenName = document.createElement("span");
+
+        const tokenName = document.createElement("span");
         tokenName.className = "tokenname";
         tokenName.innerHTML = name;
-        var tokenSf = document.createElement("span");
+
+        const tokenSf = document.createElement("span");
         tokenSf.className = "tokensf";
-        tokenSf.innerHTML = tokensf; 
+        tokenSf.innerHTML = currency; 
 
-        document.getElementsByClassName("modal")[0].appendChild(button);
-        document.getElementsByClassName("modal-button")[count].appendChild(token);
-        document.getElementsByClassName("modal-button")[count].appendChild(para);
-        document.getElementsByClassName("token-labels")[count].appendChild(tokenName);
-        document.getElementsByClassName("token-labels")[count].appendChild(tokenSf);
+        button.appendChild(token);
+        button.appendChild(para);
+        para.appendChild(tokenName);
+        para.appendChild(tokenSf);
 
-        count++;
+        modal.appendChild(button);
     }
 });
 
+// Modal functions
 document.addEventListener('DOMContentLoaded', function() {
     const ps = new PerfectScrollbar('.modal', {
         wheelSpeed: 0.4,
@@ -120,7 +126,7 @@ function toggleModal(event) {
     if (button == document.querySelectorAll(".currency")[0]) sessionStorage.setItem("pay", "true");
     else sessionStorage.setItem("receive", "true");
 
-    document.body.style.backgroundColor = "rgba(0, 0, 0, 0.5);";
+    // document.body.style.backgroundColor = "rgba(0, 0, 0, 0.5);";
 }
 
 window.onclick = function(event) {
@@ -137,38 +143,35 @@ window.onclick = function(event) {
     }
 }
 
+// Updating displayed information
 function convert() {
     const input = document.getElementsByClassName("amount")[0].value;
     const output = document.getElementsByClassName("value")[0];
     const recInput = document.getElementsByClassName("amount")[1];
-    const recOutput = document.getElementsByClassName("value")[1];
 
-    let payExRate;
-    for (const item of currencyData){
-        var token = document.getElementsByClassName("currency")[0].querySelector("span").innerHTML.trim();
-        if (item.currency === token) {
-            payExRate = item.price;
-            break;
-        }
-    }
+    let payToken = document.getElementsByClassName("currency")[0].querySelector("span").innerHTML.trim();
+    const payExRate = currencyData.find(currency => currency.currency === payToken).price;
     
     let num = input*payExRate;
     output.value = "$" + num.toFixed(2);
-    
-    let recExRate;
-    for (const item of currencyData){
-        var token = document.getElementsByClassName("currency")[1].querySelector("span").innerHTML.trim();
-        if (item.currency === token) {
-            recExRate = item.price;
-            break;
-        }
-    }
+
+    let recToken = document.getElementsByClassName("currency")[1].querySelector("span").innerHTML.trim();
+    const recExRate = currencyData.find(currency => currency.currency === recToken).price;
 
     let recNum = num/recExRate;
     recInput.value = recNum.toFixed(2);
 
+    const exRateBox = document.querySelector(".exrate");
+    exRateBox.style.display = 'block';
+    const exRate = payExRate/recExRate;
+    exRateBox.innerHTML = `1 ${recToken} = ${exRate.toFixed(5)} ${payToken}`;
+
     if (input === "") {
         output.value = "";
         recInput.value = "";
+        exRateBox.style.display = 'none';
     }
 }
+
+
+
