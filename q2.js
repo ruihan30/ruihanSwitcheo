@@ -2,17 +2,24 @@
 function prSwap() {
     const pay = $(".currency").eq(0).find("span");
     const payImg = $(".slct").eq(0);
-
     const rec = $(".currency").eq(1).find("span");
     const recImg = $(".slct").eq(1);
 
-    console.log(payImg.src);
-    const temp = pay.html();
+    let temp = pay.html();
     pay.html(rec.html());
     rec.html(temp);
     
     payImg.attr("src", "./tokens/" + pay.html().trim() + ".svg");
     recImg.attr("src", "./tokens/" + rec.html().trim() + ".svg");
+
+
+    const payValue = $(".amount").eq(0);
+    const recValue = $(".amount").eq(1);
+
+    temp = payValue.val();
+    payValue.val(recValue.val());
+    recValue.val(temp);
+
     convert();
 }
 
@@ -125,8 +132,6 @@ function toggleModal(event) {
     var button = event.target;
     if (button == document.querySelectorAll(".currency")[0]) sessionStorage.setItem("pay", "true");
     else sessionStorage.setItem("receive", "true");
-
-    // document.body.style.backgroundColor = "rgba(0, 0, 0, 0.5);";
 }
 
 window.onclick = function(event) {
@@ -134,11 +139,12 @@ window.onclick = function(event) {
     var button1 = document.querySelectorAll(".currency")[0];
     var button2 = document.querySelectorAll(".currency")[1];
 
-    if (event.target != modal && event.target != button1 && event.target != button2) {
+    if (event.target != button1 && event.target != button2) {
         if (modal.style.display == "block") {
             modal.style.display = "none";
             sessionStorage.setItem("pay", "false");
             sessionStorage.setItem("receive", "false");
+            
         }
     }
 }
