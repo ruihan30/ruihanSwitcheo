@@ -30,55 +30,61 @@
                 </button>
                 <button class="navbar-content" id="connect">Connect</button>
             </div>
-            
-
-
         </div>
 
-        <div class="form">
-            <div class="currSwap">
-                <div class="currSwap-header">
-                    <p class="header-item active">Swap</p>
-                    <button class="header-item buy">Buy</button>
-                    <img src="./tokens/settings.png" alt="settings" class="settings">
-                </div>
-                <div class="swaparea">
-                    <div class="pay box"> 
-                        <p class="pr">You pay</p>
-                        <br><input type="number" class="amount" placeholder="0" oninput="convert()">
-                        <button type="button" class="currency" onclick="toggleModal(event)" onmouseover="updateBgColor(event)" onmouseout="resetBgColor(event)">
-                            <span>ETH </span><img src="./tokens/ETH.svg" class="slct"><img src="./tokens/dropdown.png" class="dropdown">
-                        </button>
-                        <input type="text" disabled class="value">
-                    </div>
-                    <button type="button" class="swap-button" onclick="prSwap()"><img src="./tokens/swapbutton.png" alt="swap"></button>
-                    <div class="receive box">
-                        <p class="pr">You receive</p>
-                        <br><input type="number" class="amount" placeholder="0">
-                        <button type="button" class="currency" onclick="toggleModal(event)" onmouseover="updateBgColor(event)" onmouseout="resetBgColor(event)">
-                            <span>bNEO </span><img src="./tokens/bNEO.svg" class="slct"><img src="./tokens/dropdown.png" class="dropdown">
-                        </button>
-                        <input type="text" disabled class="value">
-                    </div>
-                    <div class="exrate">
-      
-                    </div>
-                </div>
-
-                <button type="button" class="connectwallet"><b>Connect Wallet</b></button>
+        <div class="currSwap">
+            <div class="currSwap-header">
+                <p class="header-item active">Swap</p>
+                <button class="header-item buy">Buy</button>
+                <img src="./tokens/settings.png" alt="settings" class="settings">
             </div>
+            <div class="swaparea">
+                <div class="pay box"> 
+                    <p class="pr">You pay</p>
+                    <br><input type="number" class="amount" placeholder="0" oninput="convert()">
+                    <button type="button" class="currency" onclick="toggleModal(event)" onmouseover="updateBgColor(event)" onmouseout="resetBgColor(event)">
+                        <span>ETH </span><img src="./tokens/ETH.svg" class="slct"><img src="./tokens/dropdown.png" class="dropdown">
+                    </button>
+                    <input type="text" disabled class="value">
+                </div>
+                <button type="button" class="swap-button" onclick="prSwap()"><img src="./tokens/swapbutton.png" alt="swap"></button>
+                <div class="receive box">
+                    <p class="pr">You receive</p>
+                    <br><input type="number" class="amount" placeholder="0">
+                    <button type="button" class="currency" onclick="toggleModal(event)" onmouseover="updateBgColor(event)" onmouseout="resetBgColor(event)">
+                        <span>bNEO </span><img src="./tokens/bNEO.svg" class="slct"><img src="./tokens/dropdown.png" class="dropdown">
+                    </button>
+                    <input type="text" disabled class="value">
+                </div>
+                <div class="exrate">
+    
+                </div>
+            </div>
+
+            <button type="button" class="connectwallet"><b>Connect Wallet</b></button>
         </div>
 
         <div class="modal">
-            <p class="modal-header">Select a token</p>
-            <!-- <button class="modal-button">
-                <img src="./tokens/ETH.svg" class="tokenlogo">
-                <p class="token-labels">
-                    <span class="tokenname">Ether</span>
-                    <span class="tokensf">ETH</span>
+            <div class="modal-header">
+                <p class="modal-title">
+                    <span>Select a token</span>
+                    <img src="./tokens/cancel.png" alt="" onclick="closeModal()">
                 </p>
-            </button> -->
+                <input id="tokenSearch" type="search" class="search" placeholder="Search...">
+            </div>
+            
+            <div class="tokenList">
+                <!-- <button class="modal-button">
+                    <img src="./tokens/ETH.svg" class="tokenlogo">
+                    <p class="token-labels">
+                        <span class="tokenname">Ether</span>
+                        <span class="tokensf">ETH</span>
+                    </p>
+                </button> -->
+            </div>
         </div>
+
+        <div id="background"></div>
     </div>    
 </body>
 </html>

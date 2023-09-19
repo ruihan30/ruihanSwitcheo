@@ -7,8 +7,18 @@
     color: black !important;
 }
 
-button:hover {
+button:hover, .modal-header img{
     cursor: pointer;
+}
+
+#background {
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    z-index: 2;
+    position: absolute;
+    /* background-color: grey;
+    opacity: 0.2 */
 }
 
 /* Navbar style */
@@ -18,6 +28,7 @@ body {
     font-size: 15px;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 .navbar {
@@ -41,8 +52,9 @@ body {
 }
 
 .search {
-    margin: 10px;
-    height: 30px;
+    margin: 8px 15px;
+    height: 35px;
+    width: auto;
     border-radius: 30px;
     border: 3px solid #89898a;
     padding: 0px 10px;
@@ -93,13 +105,8 @@ body {
 
 /* Currency swap style */
 
-.form {
-    height: 80vh;
-    margin: 0px;
-}
-
 .currSwap {
-    margin: 70px auto auto auto;
+    margin: 100px auto auto auto;
     width: 450px;
     border-radius: 20px;
     background-color: white;
@@ -195,7 +202,7 @@ input::-webkit-inner-spin-button {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 }
 
-.currency span, .dropdown, .slct {
+.currency span, .dropdown, .slct, #background{
     pointer-events: none;
 }
 
@@ -227,7 +234,7 @@ input::-webkit-inner-spin-button {
     transform: translate(-50%, -50%);
     width: 45px;
     height: 45px;
-    z-index: 2;
+    z-index: 1;
 }
 
 .pr {
@@ -252,30 +259,50 @@ input::-webkit-inner-spin-button {
 .modal {
     display: none;
     background-color:  white;
-    border-radius: 20px;
+    border-radius: 20px 20px 0px 0px;
     position: absolute;
-    top: 39.3%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 3;
-    width: 450px;
-    max-height: 400px;
+    width: 380px;
+}
+
+.tokenList {
+    position: absolute;
     overflow-y: scroll;
     overflow-x: hidden;
-    padding: 25px 0px;
+    max-height: 450px;
+    width: 100%;
+    border-radius: 0px 0px 20px 20px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .modal-header{
-    display: block;
-    margin: 0px;
+    display: flex;
+    flex-direction: column;
     border-bottom: 1px solid #979797;
-    padding: 0px 15px 15px 25px;
+    padding: 0px 0px 15px 0px;
+}
+
+.modal-header img{
+    height: 13px !important;
+    width: 13px;
+}
+
+.modal-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 0px 20px;
+    margin: 0px;
+    height: 30px;
 }
 
 .modal-button {
     background-color: white;
-    width: 450px;
+    width: 100%;
     height: 50px;
     border: none;
     display: flex;

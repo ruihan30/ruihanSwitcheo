@@ -25,16 +25,16 @@ function prSwap() {
 
 // Correcting background colour of images
 function updateBgColor(event) {
-    var button = event.target;
-    var bgColor = getComputedStyle(button).backgroundColor;
+    const button = $(event.target);
+    const bgColor = button.css('background-color');
 
-    var img = button.querySelector(".dropdown")
-    img.style.backgroundColor = bgColor; 
+    const img = button.find(".dropdown");
+    img.css('background-color', bgColor);
 }
 
 function resetBgColor(event) {
-    var button = event.target;
-    button.querySelector(".dropdown").style.backgroundColor = "white";
+    const button = $(event.target);
+    button.find(".dropdown").css('background-color', 'white');
 }
 
 
@@ -77,107 +77,121 @@ const currencyDataWithIds = currencyData.map((currency, index) => ({
     id: index + 1
 }));
 
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.querySelector('.modal');
+let tokenButtons =[];
 
-    for (const item of currencyData) {
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = $('.tokenList');
+
+    currencyData.forEach(function(item) {
         const { currency, name } = item;
 
-        const button = document.createElement("button");
-        button.className = "modal-button";
-        button.onclick = function() {
+        const button = $('<button>', { class: 'modal-button' }).on('click', function() {
             const i = sessionStorage.getItem("pay") !== "true" ? 1 : 0;
             $(".currency").eq(i).find("span").html(`${currency} `);
-            $(".slct").eq(i).attr("src", "./tokens/" + currency + ".svg");
+            $(".slct").eq(i).attr("src", `./tokens/${currency}.svg`);
             convert();
-        };
+        });
 
-        const token = document.createElement("img");
-        token.className = "tokenlogo";
-        token.src = `./tokens/${currency}.svg`;
+        const token = $('<img>', { class: 'tokenlogo', src: `./tokens/${currency}.svg` });
+        const para = $('<p>', { class: 'token-labels' });
 
-        const para = document.createElement("p");
-        para.className = "token-labels";
+        const tokenName = $('<span>', { class: 'tokenname', html: name });
+        const tokenSf = $('<span>', { class: 'tokensf', html: currency });
 
-        const tokenName = document.createElement("span");
-        tokenName.className = "tokenname";
-        tokenName.innerHTML = name;
-
-        const tokenSf = document.createElement("span");
-        tokenSf.className = "tokensf";
-        tokenSf.innerHTML = currency; 
-
-        button.appendChild(token);
-        button.appendChild(para);
-        para.appendChild(tokenName);
-        para.appendChild(tokenSf);
-
-        modal.appendChild(button);
-    }
+        button.append(token, para.append(tokenName, tokenSf));
+        modal.append(button);
+        tokenButtons.push(button);
+    });
 });
 
 // Modal functions
 document.addEventListener('DOMContentLoaded', function() {
-    const ps = new PerfectScrollbar('.modal', {
+    const ps = new PerfectScrollbar('.tokenList', {
         wheelSpeed: 0.4,
         wheelPropagation: true,
-        minScrollbarLength: 20
+        minScrollbarLength: 20,
+        zIndex: 4
     });
 });
 
 function toggleModal(event) {
-    var modal = document.querySelector(".modal");
-    modal.style.display = "block";
+    const modal = $(".modal");
+    modal.css("display", "block");
 
-    var button = event.target;
-    if (button == document.querySelectorAll(".currency")[0]) sessionStorage.setItem("pay", "true");
+    const button = $(event.target);
+    if (button.is($(".currency").eq(0))) sessionStorage.setItem("pay", "true");
     else sessionStorage.setItem("receive", "true");
+
+    $("#background").css({ "background-color": "grey", "opacity": "0.65"});
 }
 
 window.onclick = function(event) {
-    var modal = document.querySelector(".modal");
-    var button1 = document.querySelectorAll(".currency")[0];
-    var button2 = document.querySelectorAll(".currency")[1];
+    const scrollX = $(".ps__rail-y");
+    const scrollY = $(".ps__thumb-y");
+    const modalHeader = $(".modal-header");
+    const button1 = $(".currency").eq(0);
+    const button2 = $(".currency").eq(1);
 
-    if (event.target != button1 && event.target != button2) {
-        if (modal.style.display == "block") {
-            modal.style.display = "none";
-            sessionStorage.setItem("pay", "false");
-            sessionStorage.setItem("receive", "false");
-            
-        }
+    if (!button1.add(button2).add(scrollX).add(scrollY).is(event.target) && !modalHeader.has(event.target).length) {
+        closeModal(); 
     }
+} 
+
+function closeModal() {
+    const modal = $(".modal");
+
+    modal.css("display", "none");
+    sessionStorage.setItem("pay", "false");
+    sessionStorage.setItem("receive", "false");
+
+    $("#background").css({ "background-color": "", "opacity": ""});
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    $('#tokenSearch').on('input', function() {
+        var searchTerm = $(this).val().toLowerCase();
+
+        tokenButtons.forEach(function(button) {
+            var tokenName = button.find(".tokenname").text().toLowerCase();
+            var tokenSf = button.find(".tokensf").text().toLowerCase();
+
+            if (tokenName.includes(searchTerm) || tokenSf.includes(searchTerm)) {
+                button.show();
+            } else {
+                button.hide();
+            }
+        });
+    });
+});
 
 // Updating displayed information
+
 function convert() {
-    const input = document.getElementsByClassName("amount")[0].value;
-    const output = document.getElementsByClassName("value")[0];
-    const recInput = document.getElementsByClassName("amount")[1];
+    const input = $(".amount").eq(0).val();
+    const output = $(".value").eq(0);
+    const recInput = $(".amount").eq(1);
 
-    let payToken = document.getElementsByClassName("currency")[0].querySelector("span").innerHTML.trim();
+    let payToken = $(".currency").eq(0).find("span").text().trim();
     const payExRate = currencyData.find(currency => currency.currency === payToken).price;
-    
-    let num = input*payExRate;
-    output.value = "$" + num.toFixed(2);
 
-    let recToken = document.getElementsByClassName("currency")[1].querySelector("span").innerHTML.trim();
+    let num = input * payExRate;
+    output.val("$" + num.toFixed(2));
+
+    let recToken = $(".currency").eq(1).find("span").text().trim();
     const recExRate = currencyData.find(currency => currency.currency === recToken).price;
 
-    let recNum = num/recExRate;
-    recInput.value = recNum.toFixed(2);
+    recInput.val((num / recExRate).toFixed(2));
 
-    const exRateBox = document.querySelector(".exrate");
-    exRateBox.style.display = 'block';
-    const exRate = payExRate/recExRate;
-    exRateBox.innerHTML = `1 ${recToken} = ${exRate.toFixed(5)} ${payToken}`;
+    const exRateBox = $(".exrate");
+    exRateBox.css('display', 'block');
+    const exRate = payExRate / recExRate;
+    exRateBox.html(`1 ${recToken} = ${exRate.toFixed(5)} ${payToken}`);
 
     if (input === "") {
-        output.value = "";
-        recInput.value = "";
-        exRateBox.style.display = 'none';
+        output.val("");
+        recInput.val("");
+        exRateBox.css('display', 'none');
     }
 }
-
 
 
